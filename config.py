@@ -1,0 +1,3 @@
+Token = "5161932336:AAHwpg26axBNd2cJLI196QO8cbPDTyi-uTA"
+
+admin_ip = 928751523
