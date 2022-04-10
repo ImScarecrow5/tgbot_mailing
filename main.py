@@ -109,7 +109,7 @@ async def que(message: types.Message):
                 await message.reply("Хорошо", reply_markup=kb.greet_kb1)
         if message.text == 'Привет! 👋':
             if message.from_user.id == admin_ip or admin1 > -1 and message.from_user.id == admin1:
-                await message.reply("И тебе привет", reply_markup=kb.greet_kb1)
+                await message.reply("И тебе привет", reply_markup=kb.markup3)
             else:
                 await message.reply("И тебе привет", reply_markup=kb.greet_kb1)
         if message.text == 'Информация о командах':
