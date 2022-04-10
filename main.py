@@ -37,7 +37,7 @@ async def start(message: types.Message):
 @dp.message_handler(commands=['info'])
 async def start(message: types.Message):
     if message.chat.type == 'private':
-        await bot.send_message(message.from_user.id, 'Я телеграмм бот, рассылающий сообщения :)')
+        await bot.send_message(message.from_user.id, 'Я телеграмм-бот, рассылающий сообщения :)')
 
 
 @dp.message_handler(commands=['whoadmin'])
@@ -77,7 +77,7 @@ async def ras(message: types.Message):
                 except:
                     db.set_active(row[0], 0)
             await bot.send_message(message.from_user.id, "Успешная рассылка")
-            print('ID Пользователя ' + str(message.from_user.id) + ', разослал сообщение: ' + str(text1))
+            print('ID Пользователя: ' + str(message.from_user.id) + ', разослал сообщение: ' + str(text1))
 
 
 
