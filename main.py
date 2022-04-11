@@ -185,7 +185,7 @@ async def que(message: types.Message):
                             try:
                                 await bot.send_photo(row[0], text1)
                                 if int(row[1]) != 1:
-                                db.set_active(row[0], 1)
+                                    db.set_active(row[0], 1)
                             except:
                                 db.set_active(row[0], 0)
 
