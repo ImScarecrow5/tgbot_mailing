@@ -34,6 +34,17 @@ async def start(message: types.Message):
                     await bot.send_message(text1, 'Вы теперь админ')
 
 
+@dp.message_handler(commands=['deleteadmin'])
+async def start(message: types.Message):
+    global admin1
+    if message.chat.type == 'private':
+        if message.from_user.id == admin_ip:
+            text1 = message.text[13:]
+            if int(admin1) == text1:
+                await bot.send_message(message.from_user.id, text1 + ' Вы успешно удалили из админов')
+                await bot.send_message(text1, 'Вы теперь не админ :(')
+
+
 @dp.message_handler(commands=['info'])
 async def start(message: types.Message):
     if message.chat.type == 'private':
@@ -79,6 +90,23 @@ async def ras(message: types.Message):
             await bot.send_message(message.from_user.id, "Успешная рассылка")
             print('ID Пользователя: ' + str(message.from_user.id) + ', разослал сообщение: ' + str(text1))
 
+
+@dp.message_handler(commands=['sendall'])
+async def ras(message: types.Message):
+    global admin1
+    if message.chat.type == 'private':
+        if message.from_user.id == admin_ip or admin1 > -1 and message.from_user.id == admin1:
+            text1 = message.photo
+            users = db.get_users()
+            for row in users:
+                try:
+                    await bot.send_photo(row[0], text1)
+                    if int(row[1]) != 1:
+                        db.set_active(row[0], 1)
+                except:
+                    db.set_active(row[0], 0)
+            await bot.send_message(message.from_user.id, "Успешная рассылка")
+            print('ID Пользователя: ' + str(message.from_user.id) + ', разослал сообщение: ' + str(text1))
 
 
 @dp.message_handler(commands=['start'])
@@ -162,17 +190,8 @@ async def que(message: types.Message):
                 # await bot.send_message(message.from_user.id, "Успешная рассылка")
 
 
-@dp.message_handler(commands=['deleteadmin'])
-async def start(message: types.Message):
-    global admin1
-    if message.chat.type == 'private':
-        if message.from_user.id == admin_ip:
-            text1 = message.text[13:]
-            if int(admin1) == text1:
-                await bot.send_message(message.from_user.id, text1 + ' Вы успешно удалили из админов')
-                await bot.send_message(text1, 'Вы теперь не админ :(')
-
-
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
+
+
 
