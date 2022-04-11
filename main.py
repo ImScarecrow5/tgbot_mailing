@@ -18,6 +18,20 @@ admin1 = -1
 #         await bot.send_message('928751523', msg)
 
 
+@dp.message_handler(commands=['deleteadmin'])
+async def start(message: types.Message):
+    global admin1
+    if message.chat.type == 'private':
+        if message.from_user.id == admin_ip:
+            text1 = message.text[13:]
+            if admin_ip != text1 or admin1 != text1:
+                await bot.send_message(message.from_user.id, 'Извинте, но этот человек не админ')
+            else:
+                if int(admin1) == int(text1):
+                    admin1 = -1
+                    await bot.send_message(message.from_user.id, text1 + ' удален из адменов')
+                    await bot.send_message(text1, 'Вы теперь админ')
+
 
 @dp.message_handler(commands=['addadmin'])
 async def start(message: types.Message):
@@ -25,28 +39,13 @@ async def start(message: types.Message):
     if message.chat.type == 'private':
         if message.from_user.id == admin_ip:
             text1 = message.text[10:]
-            if admin_ip == text1:
-                await bot.send_message(message.from_user.id, 'Извинте, но этот человек уже админ!')
+            if admin_ip == text1 or admin1 == text1:
+                await bot.send_message(message.from_user.id, 'Извинте, но этот человек уже админ')
             else:
                 if admin1 == -1:
                     admin1 = int(text1)
                     await bot.send_message(message.from_user.id, text1 + ' теперь админ')
                     await bot.send_message(text1, 'Вы теперь админ')
-
-
-@dp.message_handler(commands=['deleteadmin'])
-async def start(message: types.Message):
-    global admin1
-    if message.chat.type == 'private':
-        if message.from_user.id == admin_ip:
-            text1 = message.text[13:]
-            if admin1 == text1:
-                text = text1 + ' Вы успешно удалили из админов'
-                await bot.send_message(message.from_user.id, text)
-                await bot.send_message(text1, 'Вы теперь не админ :(')
-                admin1 = -1
-            else:
-                await bot.send_message(message.from_user.id, 'Пользователь не админ')
 
 
 @dp.message_handler(commands=['info'])
@@ -197,4 +196,3 @@ async def que(message: types.Message):
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
-
