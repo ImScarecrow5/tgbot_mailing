@@ -147,14 +147,16 @@ async def que(message: types.Message):
             if message.from_user.id == admin_ip:
                 await message.reply("Сейчас предоставлю", reply_markup=kb.admin_panel)
                 await bot.send_message(message.from_user.id, '/sendall - разослать сообщение (команда + сообщение)')
+                await bot.send_message(message.from_user.id, '/sendphoto - разослать сообщение (в разработке)')
                 await bot.send_message(message.from_user.id, '/whoadmin - узнать кто админ')
                 await bot.send_message(message.from_user.id, '/addadmin - добавить админа (макс. 1, команда + id)')
                 await bot.send_message(message.from_user.id, '/deleteadmin - удалить админа (команда + id)')
                 await bot.send_message(message.from_user.id, '/info - информация о боте')
                 await bot.send_message(message.from_user.id, '/keyboard - клавиатура')
             elif message.from_user.id == admin1:
-                await message.reply("Сейчас предоставлю", reply_markup=kb.markup3)
+                await message.reply("Сейчас предоставлю", reply_markup=kb.admin_panel)
                 await bot.send_message(message.from_user.id, '/sendall - разослать сообщение (команда + сообщение)')
+                await bot.send_message(message.from_user.id, '/sendphoto - разослать сообщение (в разработке)')
                 await bot.send_message(message.from_user.id, '/whoadmin - узнать кто админ')
                 await bot.send_message(message.from_user.id, '/info - информация о боте')
                 await bot.send_message(message.from_user.id, '/keyboard - клавиатура')
