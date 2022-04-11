@@ -118,7 +118,7 @@ async def que(message: types.Message):
                 await bot.send_message(message.from_user.id, '/sendall - разослать сообщение (команда + сообщение)')
                 await bot.send_message(message.from_user.id, '/whoadmin - узнать кто админ')
                 await bot.send_message(message.from_user.id, '/addadmin - добавить админа (макс. 1, команда + id)')
-                await bot.send_message(message.from_user.id, '/deleteadmin - добавить админа (команда + id)')
+                await bot.send_message(message.from_user.id, '/deleteadmin - удалить админа (команда + id)')
                 await bot.send_message(message.from_user.id, '/info - информация о боте')
                 await bot.send_message(message.from_user.id, '/keyboard - клавиатура')
             elif message.from_user.id == admin1:
