@@ -18,21 +18,6 @@ admin1 = -1
 #         await bot.send_message('928751523', msg)
 
 
-@dp.message_handler(commands=['deleteadmin'])
-async def start(message: types.Message):
-    global admin1
-    if message.chat.type == 'private':
-        if message.from_user.id == admin_ip:
-            text1 = message.text[13:]
-            if admin_ip != text1 or int(admin1) != int(text1):
-                await bot.send_message(message.from_user.id, 'Извинте, но этот человек не админ')
-            else:
-                if int(admin1) == int(text1):
-                    admin1 = -1
-                    await bot.send_message(message.from_user.id, text1 + ' удален из адменов')
-                    await bot.send_message(text1, 'Вы теперь админ')
-
-
 @dp.message_handler(commands=['addadmin'])
 async def start(message: types.Message):
     global admin1
@@ -46,6 +31,20 @@ async def start(message: types.Message):
                     admin1 = int(text1)
                     await bot.send_message(message.from_user.id, text1 + ' теперь админ')
                     await bot.send_message(text1, 'Вы теперь админ')
+
+
+@dp.message_handler(commands=['deleteadmin'])
+async def start(message: types.Message):
+    global admin1
+    if message.chat.type == 'private':
+        if message.from_user.id == admin_ip:
+            text1 = message.text[13:]
+            if int(admin1) == int(text1):
+                admin1 = -1
+                await bot.send_message(message.from_user.id, text1 + ' удален из адменов')
+                await bot.send_message(text1, 'Вы теперь не админ')
+            else:
+                await bot.send_message(message.from_user.id, 'Извинте, но этот человек не админ')
 
 
 @dp.message_handler(commands=['info'])
