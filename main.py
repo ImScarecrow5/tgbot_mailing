@@ -40,9 +40,13 @@ async def start(message: types.Message):
     if message.chat.type == 'private':
         if message.from_user.id == admin_ip:
             text1 = message.text[13:]
-            if int(admin1) == text1:
-                await bot.send_message(message.from_user.id, text1 + ' Вы успешно удалили из админов')
+            if admin1 == text1:
+                text = text1 + ' Вы успешно удалили из админов'
+                await bot.send_message(message.from_user.id, text)
                 await bot.send_message(text1, 'Вы теперь не админ :(')
+                admin1 = -1
+            else:
+                await bot.send_message(message.from_user.id, 'Пользователь не админ')
 
 
 @dp.message_handler(commands=['info'])
@@ -91,11 +95,12 @@ async def ras(message: types.Message):
             print('ID Пользователя: ' + str(message.from_user.id) + ', разослал сообщение: ' + str(text1))
 
 
-@dp.message_handler(commands=['sendall'])
+@dp.message_handler(commands=['sendphoto'])
 async def ras(message: types.Message):
     global admin1
     if message.chat.type == 'private':
         if message.from_user.id == admin_ip or admin1 > -1 and message.from_user.id == admin1:
+            text1 = message.text[11:]
             text1 = message.photo
             users = db.get_users()
             for row in users:
@@ -192,6 +197,4 @@ async def que(message: types.Message):
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
-
-
 
