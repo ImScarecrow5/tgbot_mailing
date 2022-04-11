@@ -41,7 +41,7 @@ async def start(message: types.Message):
             text1 = message.text[13:]
             if int(admin1) == int(text1):
                 admin1 = -1
-                await bot.send_message(message.from_user.id, text1 + ' удален из адменов')
+                await bot.send_message(message.from_user.id, text1 + ' удален из админов')
                 await bot.send_message(text1, 'Вы теперь не админ')
             else:
                 await bot.send_message(message.from_user.id, 'Извинте, но этот человек не админ')
