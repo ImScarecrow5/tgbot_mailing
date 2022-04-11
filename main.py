@@ -24,7 +24,7 @@ async def start(message: types.Message):
     if message.chat.type == 'private':
         if message.from_user.id == admin_ip:
             text1 = message.text[13:]
-            if admin_ip != text1 or admin1 != text1:
+            if admin_ip != text1 or int(admin1) != int(text1):
                 await bot.send_message(message.from_user.id, 'Извинте, но этот человек не админ')
             else:
                 if int(admin1) == int(text1):
@@ -174,7 +174,23 @@ async def que(message: types.Message):
                 await message.reply("Чем займемся сегодня?", reply_markup=kb.admin_panel)
             else:
                 await message.reply("Вы не админ", reply_markup=kb.greet_kb1)
-
+        if message.text == 'Рассылка фото':
+            if message.from_user.id == admin_ip or admin1 > -1 and message.from_user.id == admin1:
+                await bot.send_message(message.from_user.id, "Что разослать?")
+                if message.chat.type == 'private':
+                    if message.from_user.id == admin_ip or admin1 > -1 and message.from_user.id == admin1:
+                        text1 = message.photo
+                        users = db.get_users()
+                        for row in users:
+                        try:
+                            await bot.send_photo(row[0], text1)
+                            if int(row[1]) != 1:
+                            db.set_active(row[0], 1)
+                        except:
+                            db.set_active(row[0], 0)
+        
+         await bot.send_message(message.from_user.id, "Успешная рассылка")
+        
         if message.text == 'Рассылка':
             await bot.send_message(message.from_user.id, "Извините, кнопка пока не работает. Используете /sendall")
             # await bot.send_message(message.from_user.id, "Что разослать?")
