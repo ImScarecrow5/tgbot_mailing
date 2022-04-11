@@ -69,8 +69,8 @@ async def start(message: types.Message):
 async def ras(message: types.Message):
     global admin1
     if message.chat.type == 'private':
-        if message.from_user.id == admin_ip or admin1 > -1 and message.from_user.id == admin1:
-            await message.reply("admin panel", reply_markup=kb.markup3)
+        if message.from_user.id == admin_ip or int(admin1) > -1 and message.from_user.id == int(admin1):
+            await message.reply("клавиатура", reply_markup=kb.markup3)
         else:
             await message.reply("клавиатура", reply_markup=kb.greet_kb1)
 
@@ -213,4 +213,3 @@ async def que(message: types.Message):
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
-
