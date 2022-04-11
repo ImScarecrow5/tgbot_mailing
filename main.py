@@ -182,15 +182,15 @@ async def que(message: types.Message):
                         text1 = message.photo
                         users = db.get_users()
                         for row in users:
-                        try:
-                            await bot.send_photo(row[0], text1)
-                            if int(row[1]) != 1:
-                            db.set_active(row[0], 1)
-                        except:
-                            db.set_active(row[0], 0)
-        
-         await bot.send_message(message.from_user.id, "Успешная рассылка")
-        
+                            try:
+                                await bot.send_photo(row[0], text1)
+                                if int(row[1]) != 1:
+                                db.set_active(row[0], 1)
+                            except:
+                                db.set_active(row[0], 0)
+
+                        await bot.send_message(message.from_user.id, "Успешная рассылка")
+
         if message.text == 'Рассылка':
             await bot.send_message(message.from_user.id, "Извините, кнопка пока не работает. Используете /sendall")
             # await bot.send_message(message.from_user.id, "Что разослать?")
@@ -212,3 +212,4 @@ async def que(message: types.Message):
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
+
