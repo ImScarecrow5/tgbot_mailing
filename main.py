@@ -9,22 +9,16 @@ dp = Dispatcher(bot)
 db = Database('dbras.db')
 
 admin1 = -1
-soob = ''
-userid = 0
 
 
 @dp.message_handler(commands=['addadmin'])
 async def start(message: types.Message):
     global admin1
-    global soob
-    global userid
-    userid = message.from_user.id
-    soob = message.text
     if message.chat.type == 'private':
         if message.from_user.id == admin_ip:
             text1 = message.text[10:]
-            if admin_ip == text1 or admin1 == text1:
-                await bot.send_message(message.from_user.id, 'Извинте, но этот человек уже админ')
+            if admin_ip == text1:
+                await bot.send_message(message.from_user.id, 'Извинте, но этот человек уже админ!')
             else:
                 if admin1 == -1:
                     admin1 = int(text1)
@@ -32,41 +26,15 @@ async def start(message: types.Message):
                     await bot.send_message(text1, 'Вы теперь админ')
 
 
-@dp.message_handler(commands=['deleteadmin'])
-async def start(message: types.Message):
-    global admin1
-    global soob
-    global userid
-    userid = message.from_user.id
-    soob = message.text
-    if message.chat.type == 'private':
-        if message.from_user.id == admin_ip:
-            text1 = message.text[13:]
-            if int(admin1) == int(text1):
-                admin1 = -1
-                await bot.send_message(message.from_user.id, text1 + ' удален из админов')
-                await bot.send_message(text1, 'Вы теперь не админ')
-            else:
-                await bot.send_message(message.from_user.id, 'Извинте, но этот человек не админ')
-
-
 @dp.message_handler(commands=['info'])
 async def start(message: types.Message):
-    global soob
-    global userid
-    userid = message.from_user.id
-    soob = message.text
     if message.chat.type == 'private':
-        await bot.send_message(message.from_user.id, 'Я телеграмм-бот, рассылающий сообщения :)')
+        await bot.send_message(message.from_user.id, 'Я телеграмм бот, рассылающий сообщения :)')
 
 
 @dp.message_handler(commands=['whoadmin'])
 async def start(message: types.Message):
     global admin1
-    global soob
-    global userid
-    userid = message.from_user.id
-    soob = message.text
     if message.chat.type == 'private':
         if admin1 > -1:
             admins = str(admin_ip) + ' - Главный админ, ' + str(admin1) + ' - обычный админ'
@@ -79,13 +47,9 @@ async def start(message: types.Message):
 @dp.message_handler(commands=['keyboard'])
 async def ras(message: types.Message):
     global admin1
-    global soob
-    global userid
-    userid = message.from_user.id
-    soob = message.text
     if message.chat.type == 'private':
-        if message.from_user.id == admin_ip or int(admin1) > -1 and message.from_user.id == int(admin1):
-            await message.reply("клавиатура", reply_markup=kb.markup3)
+        if message.from_user.id == admin_ip or admin1 > -1 and message.from_user.id == admin1:
+            await message.reply("admin panel", reply_markup=kb.markup3)
         else:
             await message.reply("клавиатура", reply_markup=kb.greet_kb1)
 
@@ -93,15 +57,12 @@ async def ras(message: types.Message):
 @dp.message_handler(commands=['sendall'])
 async def ras(message: types.Message):
     global admin1
-    global soob
-    global userid
-    userid = message.from_user.id
-    soob = message.text
     if message.chat.type == 'private':
         if message.from_user.id == admin_ip or admin1 > -1 and message.from_user.id == admin1:
             text1 = message.text[9:]
             users = db.get_users()
             for row in users:
+                user_ras = False
                 try:
                     await bot.send_message(row[0], text1)
                     if int(row[1]) != 1:
@@ -112,36 +73,10 @@ async def ras(message: types.Message):
             print('ID Пользователя: ' + str(message.from_user.id) + ', разослал сообщение: ' + str(text1))
 
 
-@dp.message_handler(commands=['sendphoto'])
-async def ras(message: types.Message):
-    global admin1
-    global soob
-    global userid
-    userid = message.from_user.id
-    soob = message.text
-    if message.chat.type == 'private':
-        if message.from_user.id == admin_ip or admin1 > -1 and message.from_user.id == admin1:
-            text1 = message.text[11:]
-            text1 = message.photo
-            users = db.get_users()
-            for row in users:
-                try:
-                    await bot.send_photo(row[0], text1)
-                    if int(row[1]) != 1:
-                        db.set_active(row[0], 1)
-                except:
-                    db.set_active(row[0], 0)
-            await bot.send_message(message.from_user.id, "Успешная рассылка")
-            print('ID Пользователя: ' + str(message.from_user.id) + ', разослал сообщение: ' + str(text1))
-
 
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
-    global soob
-    global userid
-    userid = message.from_user.id
     if message.chat.type == 'private':
-        soob = message.text
         if not db.user_exists(message.from_user.id):
             db.add_user(message.from_user.id)
             print(str(message.from_user.id) + ' подключился к боту')
@@ -159,37 +94,29 @@ async def start(message: types.Message):
 
 @dp.message_handler(content_types=['text'])
 async def que(message: types.Message):
-    global soob
-    global userid
-    userid = message.from_user.id
     if message.chat.type == 'private':
         if message.text == 'Назад':
-            soob = message.text
             if message.from_user.id == admin_ip or admin1 > -1 and message.from_user.id == admin1:
                 await message.reply("Хорошо", reply_markup=kb.markup3)
             else:
                 await message.reply("Хорошо", reply_markup=kb.greet_kb1)
         if message.text == 'Привет! 👋':
-            soob = message.text
             if message.from_user.id == admin_ip or admin1 > -1 and message.from_user.id == admin1:
                 await message.reply("И тебе привет", reply_markup=kb.markup3)
             else:
                 await message.reply("И тебе привет", reply_markup=kb.greet_kb1)
         if message.text == 'Информация о командах':
-            soob = message.text
             if message.from_user.id == admin_ip:
-                await message.reply("Сейчас предоставлю", reply_markup=kb.admin_panel)
+                await message.reply("Сейчас предоставлю", reply_markup=kb.markup3)
                 await bot.send_message(message.from_user.id, '/sendall - разослать сообщение (команда + сообщение)')
-                await bot.send_message(message.from_user.id, '/sendphoto - разослать сообщение (в разработке)')
                 await bot.send_message(message.from_user.id, '/whoadmin - узнать кто админ')
                 await bot.send_message(message.from_user.id, '/addadmin - добавить админа (макс. 1, команда + id)')
-                await bot.send_message(message.from_user.id, '/deleteadmin - удалить админа (команда + id)')
+                await bot.send_message(message.from_user.id, '/deleteadmin - добавить админа (команда + id)')
                 await bot.send_message(message.from_user.id, '/info - информация о боте')
                 await bot.send_message(message.from_user.id, '/keyboard - клавиатура')
             elif message.from_user.id == admin1:
-                await message.reply("Сейчас предоставлю", reply_markup=kb.admin_panel)
+                await message.reply("Сейчас предоставлю", reply_markup=kb.markup3)
                 await bot.send_message(message.from_user.id, '/sendall - разослать сообщение (команда + сообщение)')
-                await bot.send_message(message.from_user.id, '/sendphoto - разослать сообщение (в разработке)')
                 await bot.send_message(message.from_user.id, '/whoadmin - узнать кто админ')
                 await bot.send_message(message.from_user.id, '/info - информация о боте')
                 await bot.send_message(message.from_user.id, '/keyboard - клавиатура')
@@ -199,64 +126,27 @@ async def que(message: types.Message):
                 await bot.send_message(message.from_user.id, '/info - информация о боте')
                 await bot.send_message(message.from_user.id, '/keyboard - клавиатура')
         if message.text == 'Что ты умеешь? 🤔':
-            soob = message.text
             if message.from_user.id == admin_ip or admin1 > -1 and message.from_user.id == admin1:
                 await message.reply("Я телеграмм бот, рассылающий сообщения :)", reply_markup=kb.markup3)
             else:
                 await message.reply("Я телеграмм бот, рассылающий сообщения :)", reply_markup=kb.greet_kb1)
         if message.text == 'Клавиатура (только для админов)':
-            soob = message.text
             if message.from_user.id == admin_ip or admin1 > -1 and message.from_user.id == admin1:
-                await message.reply("Чем займемся сегодня?", reply_markup=kb.admin_panel)
+                await message.reply("Чем займемся сегодня?", reply_markup=kb.markup3)
             else:
                 await message.reply("Вы не админ", reply_markup=kb.greet_kb1)
-        if message.text == 'Рассылка фото':
-            soob = message.text
-            if message.from_user.id == admin_ip or admin1 > -1 and message.from_user.id == admin1:
-                await bot.send_message(message.from_user.id, "Что разослать?")
-                if message.chat.type == 'private':
-                    if message.from_user.id == admin_ip or admin1 > -1 and message.from_user.id == admin1:
-                        text1 = message.photo
-                        users = db.get_users()
-                        for row in users:
-                            try:
-                                await bot.send_photo(row[0], text1)
-                                if int(row[1]) != 1:
-                                    db.set_active(row[0], 1)
-                            except:
-                                db.set_active(row[0], 0)
-
-                        await bot.send_message(message.from_user.id, "Успешная рассылка")
-
-        if message.text == 'Рассылка':
-            soob = message.text
-            await bot.send_message(message.from_user.id, "Извините, кнопка пока не работает. Используете /sendall")
-            # await bot.send_message(message.from_user.id, "Что разослать?")
-            # if message.chat.type == 'private':
-            #     if message.from_user.id == admin_ip or admin1 > -1 and message.from_user.id == admin1:
-            #         await asyncio.sleep(5)
-                    # text1 = message.text
-                    # users = db.get_users()
-                    # for row in users:
-                    #     try:
-                    #         await bot.send_message(row[0], text1)
-                    #         if int(row[1]) != 1:
-                    #             db.set_active(row[0], 1)
-                    #     except:
-                    #         db.set_active(row[0], 0)
-                #
-                # await bot.send_message(message.from_user.id, "Успешная рассылка")
 
 
-@dp.message_handler(content_types=['text'])
-async def soob(message: types.Message):
-    global soob
-    global userid
-    if message.from_user.id != admin_ip:
-        msg = 'ID пользователя: ' + str(userid) + ', Сообщение: ' + str(soob)
-        await bot.send_message(admin_ip, msg)
+@dp.message_handler(commands=['deleteadmin'])
+async def start(message: types.Message):
+    global admin1
+    if message.chat.type == 'private':
+        if message.from_user.id == admin_ip:
+            text1 = message.text[13:]
+            if int(admin1) == text1:
+                await bot.send_message(message.from_user.id, text1 + ' Вы успешно удалили из админов')
+                await bot.send_message(text1, 'Вы теперь не админ :(')
 
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
-
